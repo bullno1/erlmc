@@ -33,7 +33,7 @@
 -export([init/1, handle_call/3, handle_cast/2, 
 	     handle_info/2, terminate/2, code_change/3]).
 -export([start_link/2]).
--export([get/2, set/4]).
+-export([get/2, set/4, delete/2]).
 
 %% API functions
 -spec start_link(inet:ip_address() | inet:hostname(), inet:port_number()) -> {ok, Pid :: pid()} | {error, Error :: any()}.
@@ -43,8 +43,11 @@ start_link(Host, Port) ->
 -spec get(pid(), binary()) -> binary().
 get(Conn, Key) -> gen_server:call(Conn, {get, Key}).
 
--spec set(pid(), binary(), binary(), non_neg_integer()) -> ok.
+-spec set(pid(), binary(), binary(), non_neg_integer()) -> binary().
 set(Conn, Key, Value, Expiration) -> gen_server:call(Conn, {set, Key, Value, Expiration}), ok.
+
+-spec delete(pid(), binary()) -> ok.
+delete(Conn, Key) -> gen_server:call(Conn, {delete, Key}), ok.
 
 %%====================================================================
 %% gen_server callbacks
